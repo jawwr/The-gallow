@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Channels;
 
 namespace the_gallows
 {
@@ -7,30 +8,45 @@ namespace the_gallows
     {
         public static void Input(string word, int health)
         {
-            DrawWords(word, new List<char>(),health);
+            
             char input;
             List<char> letter = new List<char>();
+            string newword = GenerateWords(word, letter);
+            DrawGallow(health, newword);
             bool end = false;
             do
             {
                 input = char.Parse(Console.ReadLine());
                 if (word.Contains(input, StringComparison.OrdinalIgnoreCase))
-                    letter.Add(input);
+                {
+                    if(!letter.Contains(input))
+                        letter.Add(input);
+                }
                 else
+                {
                     health--;
-                
-                DrawWords(word, letter, health);
+                }
+                newword = GenerateWords(word, letter);
+                DrawGallow(health, newword);
                 if (health == 0) 
                 { 
                     Console.WriteLine("Вы проиграли");
+                    Console.WriteLine($"Слово {word}");
                     break;
                 }
+
+                if (newword == word)
+                {
+                    Console.WriteLine("Вы выиграли");
+                    end = true;
+                }
             } while (!end);
+
+            
         }
 
-        static void DrawWords(string word,List<char> letters, int health)
+        static string GenerateWords(string word,List<char> letters)
         {
-            Console.Clear();
             string newword = string.Empty;
             for (int i = 0; i < word.Length; i++)
             {
@@ -38,7 +54,14 @@ namespace the_gallows
                     ? word[i]
                     : '_';
             }
-            Console.WriteLine(newword);
+
+            return newword;
+        }
+
+        static void DrawGallow(int health, string word)
+        {
+            Console.Clear();
+            Console.WriteLine(word);
             Console.WriteLine($"Жизни:{health}");
         }
     }
