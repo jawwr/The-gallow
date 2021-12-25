@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Channels;
 
 namespace the_gallows
 {
     public class Gallows
     {
-        public static void Input(string word, int health)
+        public static void Input(Gallow gallow)
         {
-            
+            string word = gallow.GetWord();
             char input;
             List<char> letter = new List<char>();
             string newword = GenerateWords(word, letter);
-            DrawGallow(health, newword);
+            DrawGallow(newword, gallow.GetHealth());
             bool end = false;
             do
             {
@@ -24,11 +23,11 @@ namespace the_gallows
                 }
                 else
                 {
-                    health--;
+                    gallow.Mistake();
                 }
                 newword = GenerateWords(word, letter);
-                DrawGallow(health, newword);
-                if (health == 0) 
+                DrawGallow(newword, gallow.GetHealth());
+                if (gallow.GetHealth() == 0) 
                 { 
                     Console.WriteLine("Вы проиграли");
                     Console.WriteLine($"Слово {word}");
@@ -58,7 +57,7 @@ namespace the_gallows
             return newword;
         }
 
-        static void DrawGallow(int health, string word)
+        static void DrawGallow(string word, int health)
         {
             Console.Clear();
             Console.WriteLine(word);

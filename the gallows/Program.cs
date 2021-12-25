@@ -1,15 +1,16 @@
 ﻿using System;
 using System.IO;
+using System.Net.NetworkInformation;
 
 namespace the_gallows
 {
+    
     class Program
     {
         static void Main(string[] args)
         {
-            string word = GetWords();
-            int health = 8;
-            Gallows.Input(word,health);
+            Gallow gallow = new Gallow(GetWords());
+            Gallows.Input(gallow);
         }
 
         static string GetWords()
